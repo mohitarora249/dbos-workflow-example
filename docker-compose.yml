@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: dbos-workflows-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dbos_user
+      POSTGRES_PASSWORD: dbos_dev_password
+      POSTGRES_DB: dbos_workflows
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbos_workflows_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scroll -d dbos_workflows"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  dbos_workflows_data:
